@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jaguar_query_sqflite/jaguar_query_sqflite.dart';
 import 'package:moor_deneme/models/post/post.dart';
+import 'package:moor_deneme/pages/add_item_page.dart';
 import 'package:moor_deneme/pages/add_page.dart';
 import 'package:moor_deneme/pages/edit_page.dart';
 import 'package:path/path.dart' as path;
@@ -96,7 +97,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<Post>> denemeler() async {
     final authors = await bean.getAll();
-    print(authors);
     return bean.preloadAll(authors);
   }
 
@@ -114,50 +114,63 @@ class _HomePageState extends State<HomePage> {
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => EditPage(
-                              which: 0,
-                              myAdapter: _adapter,
-                              postWillUpdate: snapshot.data[index],
-                            ),
+                  return GestureDetector(
+                    onLongPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AddItemPage(
+                            myAdapter: _adapter,
+                            postWillUpdate: snapshot.data[index],
                           ),
-                        );
-                      },
-                      child: Text(
-                        snapshot.data[index].msg,
-                      ),
-                    ),
-                    subtitle: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: snapshot.data[index].items == null
-                          ? 0
-                          : snapshot.data[index].items.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => EditPage(
-                                  which: i + 1,
-                                  myAdapter: _adapter,
-                                  postWillUpdate: snapshot.data[index],
-                                ),
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      title: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditPage(
+                                which: 0,
+                                myAdapter: _adapter,
+                                postWillUpdate: snapshot.data[index],
                               ),
-                            );
-                          },
-                          child: Text(
-                            "${snapshot.data[index].items[i].msg}, id: ${snapshot.data[index].items[i].id}",
-                            style: TextStyle(fontSize: 40),
-                          ),
-                        );
-                      },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          snapshot.data[index].msg,
+                        ),
+                      ),
+                      subtitle: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: snapshot.data[index].items == null
+                            ? 0
+                            : snapshot.data[index].items.length,
+                        itemBuilder: (BuildContext context, int i) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => EditPage(
+                                    which: i + 1,
+                                    myAdapter: _adapter,
+                                    postWillUpdate: snapshot.data[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "${snapshot.data[index].items[i].msg}, id: ${snapshot.data[index].items[i].id}",
+                              style: TextStyle(fontSize: 40),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   );
                 },

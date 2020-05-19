@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:jaguar_orm/jaguar_orm.dart';
 import 'package:jaguar_query/jaguar_query.dart';
+import 'package:moor_deneme/models/post/post.dart';
 
-import 'post.dart';
 
 part 'item.jorm.dart';
 
